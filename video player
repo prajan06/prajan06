@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Video Player </title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+ 
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #e0f7fa;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #009688;
+      padding: 30px 20px;
+      color: white;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      margin: 15px 0;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover {
+      color: #ffeb3b;
+    }
+
+    .main {
+      margin-left: 270px;
+      padding: 30px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    h1 {
+      color: #00695c;
+    }
+
+    .section {
+      margin-bottom: 50px;
+    }
+
+    .section h2 {
+      color: #ff5722;
+    }
+
+    .videos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .video-card {
+      width: 300px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      text-align: center;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .video-title {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    .video-link {
+      background: #00796b;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-top: 8px;
+      text-decoration: none;
+    }
+
+    .video-link:hover {
+      background: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>Video Topics</h2>
+    <a href="#nature">Nature Videos</a>
+    <a href="#wildlife">Wildlife Videos</a>
+    <a href="#travel">Travel Videos</a>
+    <a href="#space">space Videos</a>
+  </div>
+
+  <div class="main">
+    <h1>Video Player Library</h1>
+
+    <!-- Nature Section -->
+    <div class="section" id="nature">
+      <h2>Nature Videos</h2>
+      <div class="videos">
+        <div class="video-card">
+          <video controls>
+            <source src="1 minute of Walking Through Leaves.mp4" type="video/mp4" />
+            Your browser does not support video.
+          </video>
+          <p class="video-title">Forest Leaves</p>
+          
+        </div>
+        <div class="video-card">
+          <video controls>
+            <source src="1 minute waterfall sound.mp4" type="video/mp4" />
+          </video>
+          <p class="video-title">Calm Waterfall</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wildlife Section -->
+    <div class="section" id="wildlife">
+      <h2>Wildlife Videos</h2>
+      <div class="videos">
+        <div class="video-card">
+          <video controls>
+            <source src="Africa Wildlife In 1 Minute - Scenic Travel Short Video.mp4" type="video/mp4" />
+          </video>
+          <p class="video-title">African Safari</p>
+         
+        </div>
+        <div class="video-card">
+          <video controls>
+            <source src="Amazing Scene of Wild Animals In 4K - Scenic Relaxation Film.mp4" type="video/mp4" />
+          </video>
+          <p class="video-title">Jungle Sounds</p>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Travel Section -->
+    <div class="section" id="travel">
+      <h2>Travel Videos</h2>
+      <div class="videos">
+        <div class="video-card">
+          <video controls>
+            <source src="Mount Everest in 4K 60p HDR - 1 Min @Hello Nature.mp4" type="video/mp4" />
+          </video>
+          <p class="video-title">Mount Everest</p>
+       
+        </div>
+        <div class="video-card">
+          <video controls>
+            <source src="Sea Nature _ 1 minute relaxing video _ Fish aquarium _  Amazing Underwater Marine Life.mp4" type="video/mp4" />
+          </video>
+          <p class="video-title">Ocean Journey</p>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--space view -->
+  <div class="section" id="travel">
+    <h2>space Videos</h2>
+    <div class="videos">
+      <div class="video-card">
+        <video controls>
+          <source src="Travel - 1 min travel in Space 🚀.mp4" type="video/mp4" />
+        </video>
+        <p class="video-title">space</p>
+     
+      </div>
+      <div class="video-card">
+        <video controls>
+          <source src="videoplayback.mp4" type="video/mp4" />
+        </video>
+        <p class="video-title">space planets</p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
