@@ -197,6 +197,42 @@
     </div>
   </div>
 </div>
+ <h2>Contact Us</h2>
+  <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" style="max-width: 500px;">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required style="width:100%; padding: 10px; margin: 10px 0;"><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="_replyto" required style="width:100%; padding: 10px; margin: 10px 0;"><br>
+
+    <label for="message">Message:</label><br>
+    <textarea id="message" name="message" rows="5" required style="width:100%; padding: 10px; margin: 10px 0;"></textarea><br>
+
+    <button type="submit" style="padding: 10px 20px; background-color: #00796b; color: white; border: none; border-radius: 5px;">Send Message</button>
+  </form>
+</div>
+<script>
+    // Smooth scrolling for sidebar links
+    document.querySelectorAll('.sidebar a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Toggle play/pause for videos when clicked
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+      video.addEventListener('click', function() {
+        if (this.paused) {
+          this.play();
+        } else {
+          this.pause();
+        }
+      });
+    });
 
 
 </body>
