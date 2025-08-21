@@ -1,1 +1,68 @@
+class StudentNode:
+    def __init__(self, roll, name, dept, cgpa):
+        self.roll = roll
+        self.name = name
+        self.dept = dept
+        self.cgpa = cgpa
+        self.next = None
+class Record:
+    def __init__(self):
+        self.head = None
+
+    def add(self, roll, name, dept, cgpa):
+        new_node = StudentNode(roll, name, dept, cgpa)
+        new_node.next = self.head
+        self.head = new_node
+        print(f"Added student: {roll}, {name}")
+    def delete(self, roll):
+        curr = self.head
+        prev = None
+        while curr:
+            if curr.roll == roll:
+                if prev:
+                    prev.next = curr.next
+                else:
+                    self.head = curr.next
+                print(f"Deleted student: {roll}")
+                return True
+            prev = curr
+            curr = curr.next
+        print(f"Student with roll {roll} not found.")
+        return False
+
+    def search(self, roll):
+        curr = self.head
+        while curr:
+            if curr.roll == roll:
+                print(f"Found student: {curr.roll:<3} {curr.name:<10} {curr.dept:<5} {curr.cgpa:.2f}")
+                return curr
+            curr = curr.next
+        print(f"Student {roll} not found.")
+        return None
+
+    def display(self):
+        curr = self.head
+        print("-"*40)
+        print(f"{'Roll':<6} {'Name':<12} {'Department':<12} {'CGPA':<5}")
+        print("-" * 40)
+        if not curr:
+            print("No records found.")
+        while curr:
+            print(f"{curr.roll:<6} {curr.name:<12} {curr.dept:<12} {curr.cgpa:<.2f}")
+            curr = curr.next
+students = Record()
+students.add(1, "Sam", "CSE", 8.5)
+students.add(2, "karthi", "ECE", 8.9)
+students.add(3, "albet", "MEE", 7.8)
+students.add(4, "sathi", "CSE", 9.1)
+students.add(5, "gogul", "EEE", 8.3)
+students.add(6, "Sai", "MEE", 7.5)
+students.add(7, "Chozen", "ECE", 8.7)
+students.add(8, "Gayathi", "CSE", 9.0)
+students.add(9, "kamalesh", "EEE", 8.6)
+students.display()
+students.search(8)
+students.delete(8)
+students.search(8)
+students.display()
 
