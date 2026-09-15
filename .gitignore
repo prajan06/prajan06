@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.pyc
+securevault.db
+private_key.pem
+public_key.pem

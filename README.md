@@ -1,17 +1,22 @@
- import random
-import string
+# SecureVault Health
+Encrypted patient record storage and access control mini project.
 
-def generate_password(length=12):
-    # Define characters to use in the password
-    all_characters = string.ascii_letters + string.digits + string.punctuation
-    
-    # Randomly select characters from the pool
-    password = ''.join(random.choice(all_characters) for _ in range(length))
-    
-    return password
+## Run on Windows
+1. Extract the ZIP.
+2. Open the folder in VS Code.
+3. Open Terminal.
+4. `py -3.14 -m venv venv`
+5. `venv\Scripts\activate`
+6. `pip install -r requirements.txt`
+7. `python database.py`
+8. `python app.py`
+9. Open http://127.0.0.1:5000/
 
-# Example usage
-if __name__ == "__main__":
-    password_length = 16  # You can specify any length you want
-    generated_password = generate_password(password_length)
-    print("Generated GitHub Password:", generated_password)
+Demo accounts:
+- doctor / doctor123
+- admin / admin123
+- auditor / auditor123
+
+
+## AWS Cloud Mode
+See `AWS_SETUP.md`. When `AWS_S3_BUCKET` is configured, encrypted patient records are uploaded to Amazon S3 and fetched from S3 before authorized decryption. If it is not configured, the application continues in local mode.
