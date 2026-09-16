@@ -1,1 +1,335 @@
+import re
+import math
+import pandas as pd
 
+from urllib.parse import urlparse
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+
+# ============================================================
+# PHISHING WEBSITE DETECTION USING MACHINE LEARNING
+# ============================================================
+
+print("=" * 60)
+print("       PHISHING WEBSITE DETECTION USING MACHINE LEARNING")
+print("=" * 60)
+
+
+# ------------------------------------------------------------
+# 1. FEATURE EXTRACTION
+# ------------------------------------------------------------
+
+def extract_features(url):
+
+    features = []
+
+    # Add scheme if missing
+    if not url.startswith(("http://", "https://")):
+        test_url = "http://" + url
+    else:
+        test_url = url
+
+    parsed = urlparse(test_url)
+
+    hostname = parsed.netloc.lower()
+    path = parsed.path
+
+    # Remove port number
+    hostname = hostname.split(":")[0]
+
+    # Feature 1: URL length
+    url_length = len(url)
+
+    # Feature 2: Number of dots
+    dot_count = url.count(".")
+
+    # Feature 3: Number of hyphens
+    hyphen_count = url.count("-")
+
+    # Feature 4: Number of @ symbols
+    at_count = url.count("@")
+
+    # Feature 5: Number of ? symbols
+    question_count = url.count("?")
+
+    # Feature 6: Number of = symbols
+    equal_count = url.count("=")
+
+    # Feature 7: Number of & symbols
+    ampersand_count = url.count("&")
+
+    # Feature 8: Number of digits
+    digit_count = sum(c.isdigit() for c in url)
+
+    # Feature 9: Number of special characters
+    special_count = len(re.findall(r"[^a-zA-Z0-9]", url))
+
+    # Feature 10: HTTPS
+    https = 1 if parsed.scheme == "https" else 0
+
+    # Feature 11: IP address in URL
+    ip_pattern = r"^(?:\d{1,3}\.){3}\d{1,3}$"
+    has_ip = 1 if re.match(ip_pattern, hostname) else 0
+
+    # Feature 12: Number of subdomains
+    parts = hostname.split(".")
+    subdomain_count = max(0, len(parts) - 2)
+
+    # Feature 13: Suspicious words
+    suspicious_words = [
+        "login",
+        "verify",
+        "verification",
+        "account",
+        "update",
+        "secure",
+        "bank",
+        "signin",
+        "password",
+        "confirm",
+        "free",
+        "bonus",
+        "urgent"
+    ]
+
+    suspicious_word_count = sum(
+        1 for word in suspicious_words
+        if word in url.lower()
+    )
+
+    # Feature 14: URL entropy
+    if len(url) > 0:
+        frequency = {}
+
+        for character in url:
+            frequency[character] = frequency.get(character, 0) + 1
+
+        entropy = 0
+
+        for count in frequency.values():
+            probability = count / len(url)
+            entropy -= probability * math.log2(probability)
+    else:
+        entropy = 0
+
+    features = [
+        url_length,
+        dot_count,
+        hyphen_count,
+        at_count,
+        question_count,
+        equal_count,
+        ampersand_count,
+        digit_count,
+        special_count,
+        https,
+        has_ip,
+        subdomain_count,
+        suspicious_word_count,
+        entropy
+    ]
+
+    return features
+
+
+# ------------------------------------------------------------
+# 2. SAMPLE DATASET
+# ------------------------------------------------------------
+
+data = {
+
+    "url": [
+        "https://google.com",
+        "https://www.amazon.com",
+        "https://www.microsoft.com",
+        "https://www.wikipedia.org",
+        "https://www.apple.com",
+        "https://github.com",
+        "https://www.python.org",
+        "https://www.youtube.com",
+        "https://www.linkedin.com",
+        "https://www.facebook.com",
+
+        "http://secure-login-verification.com",
+        "http://paypal-login-account-verify.com",
+        "http://bank-account-update-login.com",
+        "http://free-gift-card-urgent.com",
+        "http://192.168.1.1/login",
+        "http://verify-account-password.com",
+        "http://secure-bank-login-confirm.com",
+        "http://amazon-account-verification.com",
+        "http://facebook-login-security-update.com",
+        "http://paypal.com.security-check.example.com"
+    ],
+
+    "label": [
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+
+        1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1
+    ]
+}
+
+
+df = pd.DataFrame(data)
+
+
+# ------------------------------------------------------------
+# 3. CREATE FEATURES
+# ------------------------------------------------------------
+
+feature_names = [
+    "url_length",
+    "dot_count",
+    "hyphen_count",
+    "at_count",
+    "question_count",
+    "equal_count",
+    "ampersand_count",
+    "digit_count",
+    "special_count",
+    "https",
+    "has_ip",
+    "subdomain_count",
+    "suspicious_word_count",
+    "entropy"
+]
+
+
+X = []
+
+for url in df["url"]:
+    X.append(extract_features(url))
+
+X = pd.DataFrame(X, columns=feature_names)
+
+y = df["label"]
+
+
+print("\nDataset loaded successfully.")
+print("Total URLs:", len(df))
+
+
+# ------------------------------------------------------------
+# 4. SPLIT DATA
+# ------------------------------------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.3,
+    random_state=42,
+    stratify=y
+)
+
+
+print("Training samples:", len(X_train))
+print("Testing samples:", len(X_test))
+
+
+# ------------------------------------------------------------
+# 5. TRAIN RANDOM FOREST
+# ------------------------------------------------------------
+
+print("\nTraining Random Forest model...")
+
+model = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+print("Training completed successfully.")
+
+
+# ------------------------------------------------------------
+# 6. MODEL EVALUATION
+# ------------------------------------------------------------
+
+y_pred = model.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("\n" + "=" * 60)
+print("                 MODEL EVALUATION")
+print("=" * 60)
+
+print(f"\nAccuracy: {accuracy * 100:.2f}%")
+
+print("\nClassification Report:")
+print(
+    classification_report(
+        y_test,
+        y_pred,
+        target_names=["Legitimate", "Phishing"],
+        zero_division=0
+    )
+)
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+
+# ------------------------------------------------------------
+# 7. REAL-TIME URL PREDICTION
+# ------------------------------------------------------------
+
+print("\n" + "=" * 60)
+print("             PHISHING URL DETECTOR")
+print("=" * 60)
+
+while True:
+
+    url = input(
+        "\nEnter website URL "
+        "(or type 'exit' to quit): "
+    ).strip()
+
+    if url.lower() == "exit":
+        print("\nProgram terminated.")
+        break
+
+    if not url:
+        print("Please enter a URL.")
+        continue
+
+    features = extract_features(url)
+
+    feature_data = pd.DataFrame(
+        [features],
+        columns=feature_names
+    )
+
+    prediction = model.predict(feature_data)[0]
+
+    probability = model.predict_proba(feature_data)[0]
+
+    print("\n----------------------------------------")
+
+    if prediction == 1:
+
+        print("Prediction : PHISHING WEBSITE")
+
+        print(
+            f"Phishing Probability: "
+            f"{probability[1] * 100:.2f}%"
+        )
+
+        print("Warning: This URL has suspicious characteristics.")
+
+    else:
+
+        print("Prediction : LEGITIMATE WEBSITE")
+
+        print(
+            f"Legitimate Probability: "
+            f"{probability[0] * 100:.2f}%"
+        )
+
+        print("The URL does not match the phishing patterns learned by this model.")
+
+    print("----------------------------------------")
